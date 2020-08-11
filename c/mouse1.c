@@ -17,7 +17,7 @@ int main(int argc, char *argv[])                        //get mouse program file
     
     FILE *filePointer;                                  //pointer to file
     char *is_it_mouse;                                  //check to see if file ends in .mouse
-    char ch, statement;
+    char ch;       
     char *filename = malloc(255 * sizeof(char));        //read character
     char *prog = malloc(MAXPROGLEN * sizeof(char));     //program array of characters
     int charpos = 0;                                    //character position in array
@@ -46,51 +46,16 @@ int main(int argc, char *argv[])                        //get mouse program file
         while ((ch = fgetc(filePointer)) != EOF)
         {
         
-            if(ch == '~'){ 
-
-              while((ch = fgetc(filePointer)) != '\n'){
-                  continue;
-              }
-              charpos = charpos - 1;
-            }
-
             prog[charpos] = ch;
             charpos++;
-        }
-        
-        //As a final item, if the program read in is too long, STOP.
-        if(strlen(prog) > MAXPROGLEN){
-
-            printf("Your mouse program is too long.");
-            exit(0);
 
         }
+        prog[charpos + 1] = '\0';           //append string null character
+        printf("%s \n", prog);
+
+    }
 
     
-
-    }
-
-
-    //main program interpreter looop
-    charpos = 0;
-    while(prog[charpos] != '$'){
-
-      statement = prog[charpos];
-
-      switch(statement){
-            case '?':
-               printf("Found a '?'\n");
-               break;
-            case '!':
-               printf("Found a '!'\n");
-               break;
-            default:
-               printf("%c\n", statement);
-
-      }
-      charpos++;
-
-    }
     fclose(filePointer);
 
     return 0;

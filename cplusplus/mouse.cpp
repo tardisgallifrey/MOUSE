@@ -14,48 +14,84 @@ using namespace std;
 
 //Set max length of program array
 #define MAXPROGLEN 1000
+#define STACKSIZE 20
+
+int ctoi(char ch);
 
 int main(int argc, char *argv[])                        //get mouse program file from command line
 {
+
+    //Variable Declarations
     ifstream filePointer;
     char ch;                                        //read character
     char *is_it_mouse;
     char *filename = (char*)malloc(100);
     char *prog = (char*)malloc(MAXPROGLEN);         //program array of characters
+    int *stack = (int*)malloc(STACKSIZE);
     int charpos = 0;                                //character position in array
+    int temp;
     string line;
 
+    //Read filename from command line
     filename = argv[1];
     is_it_mouse = strstr(filename, ".mouse");
 
+    //What to do if command line is deficient
     if(argc != 2 || is_it_mouse == NULL){                                      //check to see if a file name is included
         cout << "\nUsage: mouse hello.mouse" << endl;
         cout << "     Also, be sure file ends in .mouse" << endl;
         exit(-1);
     }
 
+    //Open MOUSE file and get going on reading in from file
     filePointer.open( filename );        //open mouse file
 
-    //
     if (filePointer.bad())
     {
         cout << "File cannot be opened, or does not exist." << endl;
     }
     else
     {
-        //4
+        //Read in file.
         while (!filePointer.eof())
         {
-        
+
+            //Get a character
             filePointer.get(prog[charpos]);
+	        
+            //If character is tilde (comment), bypass and read another
+            if(prog[charpos] == '~'){
+              while(prog[charpos] != '\n'){
+                filePointer.get(prog[charpos]);
+              }
+              //If we did the above, backspace pos to discard tilde
+              charpos = charpos -1;
+            }
+            //Increment and begin again.
             charpos++;
 
         }
+        //At the end, add string NULL
         prog[charpos + 1] = '\0';
-        cout << prog << endl;
 
     }
+    //close file pointer
     filePointer.close();
 
+    //Begin Interpretation of MOUSE Program
+    temp = ctoi('8');
     return 0;
+}
+
+
+int ctoi(char ch){
+
+    if(ch>='0' && ch<='9'){
+        return ch - '0';
+    }
+    else
+    {
+        return -1;
+    }
+    
 }
