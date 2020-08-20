@@ -15,7 +15,6 @@
 
 //Set max length of program array
 #define MAXPROGLEN 1000
-#define INPUTLENGTH 255
 
 //declaring stack structure
 struct stack
@@ -44,9 +43,8 @@ int main(int argc, char *argv[])                        //get mouse program file
     char ch;
     char *filename = malloc(255 * sizeof(char));        //read character
     char *prog = malloc(MAXPROGLEN * sizeof(char));     //program array of characters
-    char *input = malloc(INPUTLENGTH * sizeof(char));
     int charpos = 0;                                    //character position in array
-    int temp, i;
+    int temp;
     stackPtr stackNewPtr = NULL;                        //declared pointer that points to the top of stack
 
 
@@ -93,7 +91,7 @@ int main(int argc, char *argv[])                        //get mouse program file
 
         }
     }
-    
+
 
     //main program interpreter loop
     //set character counter and stack pointer to 0
@@ -145,14 +143,6 @@ int main(int argc, char *argv[])                        //get mouse program file
                 break;
             case '!':
                 printf("%d", pop(&stackNewPtr));
-                break;
-            case '?':
-                temp = 0;
-                fgets(input, sizeof(input), stdin);
-                for(i = 0; i < strlen(input) - 1; i++){
-                    temp = 10 * temp + ctoi(input[i]);
-                }
-                push(&stackNewPtr, temp);
                 break;
             default:
                 break;

@@ -1,5 +1,8 @@
 ~a hello world program
 ?!
+?!
+?!
+1234
 2 2 +
 !
 2 3 -
@@ -10,5 +13,6 @@
 !
 7 2 %
 !
+12345
 ~another remark
 $

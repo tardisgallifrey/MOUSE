@@ -18,6 +18,12 @@ using namespace std;
 
 int ctoi(char ch);
 
+char readprog(int charpos, char *prog);
+
+int backpos(int charpos);
+
+void push(int *stackpointer, int *stack, int datum);
+
 int main(int argc, char *argv[])                        //get mouse program file from command line
 {
 
@@ -30,6 +36,7 @@ int main(int argc, char *argv[])                        //get mouse program file
     int *stack = (int*)malloc(STACKSIZE);
     int charpos = 0;                                //character position in array
     int temp;
+    int *stackpointer;
     string line;
 
     //Read filename from command line
@@ -78,9 +85,15 @@ int main(int argc, char *argv[])                        //get mouse program file
     //close file pointer
     filePointer.close();
 
-    //Begin Interpretation of MOUSE Program
-    temp = ctoi('8');
-    return 0;
+    //*******Begin Interpretation of MOUSE Program********
+    
+    //Reset the program counter and get your first character
+    charpos = 0;
+    ch = readprog(charpos, prog);
+    charpos++;
+
+
+
 }
 
 
@@ -94,4 +107,29 @@ int ctoi(char ch){
         return -1;
     }
     
+}
+
+char readprog(int charpos, char *prog){
+
+    char ch = prog[charpos];
+    return ch;
+}
+
+int backpos(int charpos){
+
+    return charpos -= 1;
+
+}
+
+void push(int *stackpointer, int *stack, int datum){
+
+    *stackpointer++;
+    stack[*stackpointer] = datum;
+
+}
+
+int pop(int *stackpointer, int *stack){
+
+    int temp = stack[*stackpointer];
+    return temp;
 }
