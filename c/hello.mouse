@@ -1,14 +1,7 @@
 ~a hello world program
-?!
-2 2 +
-!
-2 3 -
-!
-3 3 *
-!
-10 2 /
-!
-7 2 %
-!
+2
+22
+33
+333
 ~another remark
 $

@@ -1,8 +1,14 @@
 ~a hello world program
-?
-hello world
-time to begin
+? !
+21 21 +
+!
+66 3 -
+!
+30 30 *
+!
+200 2 /
+!
+10 7 %
+!
 ~another remark
-!what to do
-???
-
+$
