@@ -15,25 +15,14 @@
 
 //Set max length of program array
 #define MAXPROGLEN 1000
+#define STACKSIZE 20
 
-//declaring stack structure
-struct stack
-{
-   int data;
-   struct stack *ptr; //pointer type of stack
-};
-
-typedef struct stack Stack;
-typedef Stack *stackPtr;
-
-//function prototypes of different functions
-void push(stackPtr *top, int x);                        //for pushing value in stack
-int pop(stackPtr *top);                                 //for popping value out of stack
-int checkEmpty(stackPtr top);                           //checking whether stack is empty
-
-//function to convert ascii numbers to integers
-int ctoi( char ch);
-
+//Define stack and pointer
+int stack_num[STACKSIZE];
+int stackpointer = -1;
+int ctoi(char ch);
+int push(int val);
+int pop();
 
 int main(int argc, char *argv[])                        //get mouse program file from command line
 {
@@ -45,17 +34,26 @@ int main(int argc, char *argv[])                        //get mouse program file
     char *prog = malloc(MAXPROGLEN * sizeof(char));     //program array of characters
     int charpos = 0;                                    //character position in array
     int temp;
-    stackPtr stackNewPtr = NULL;                        //declared pointer that points to the top of stack
 
 
-    filename = argv[1];                                 //point filepointer to filename
-    is_it_mouse = strstr(filename, ".mouse");           //see if filename contains .mouse
+    
 
-    if(argc != 2 || is_it_mouse == NULL){               //check to see if a file name is included and proper type
+    if(argc != 2){               //check to see if a file name is included and proper type
         printf("\nUsage: mouse hello.mouse\n");
         printf("     Also, make sure file ends in .mouse\n");
         exit(-1);
     }
+    else
+    {
+        filename = argv[1];                                 //point filepointer to filename
+        is_it_mouse = strstr(filename, ".mouse");           //see if filename contains .mouse
+        if(!is_it_mouse)
+        {
+            printf("This isn't a mouse program.\n");
+            exit(-1);
+        }
+    }
+    
 
     filePointer = fopen(filename, "r");  //open mouse file
 
@@ -120,29 +118,50 @@ int main(int argc, char *argv[])                        //get mouse program file
                     charpos++;
                     ch = prog[charpos];
                 }while(isdigit(ch));
-                push(&stackNewPtr, temp);  
+                push(temp);  
                 charpos -= 1;
                 break;
             case '+':
-                push(&stackNewPtr, pop(&stackNewPtr) + pop(&stackNewPtr) );
+                push(pop() + pop() );
                 break;
             case '-':
-                temp = pop(&stackNewPtr);
-                push(&stackNewPtr, pop(&stackNewPtr) - temp );
+                temp = pop();
+                push(pop() - temp );
                 break;
             case '*':
-                push(&stackNewPtr, pop(&stackNewPtr) * pop(&stackNewPtr));
+                push(pop() * pop());
                 break;
             case '/':
-                temp = pop(&stackNewPtr);
-                push(&stackNewPtr, pop(&stackNewPtr) / temp);
+                temp = pop();
+                push(pop() / temp);
                 break;
             case '%':
-                temp = pop(&stackNewPtr);
-                push(&stackNewPtr, pop(&stackNewPtr) % temp);
+                temp = pop();
+                push(pop() % temp);
+                break;
+            case '?':
+                scanf("%d", &temp);
+                push(temp);
                 break;
             case '!':
-                printf("%d", pop(&stackNewPtr));
+                printf("%d", pop());
+                break;
+            case '"':
+                charpos++;
+                ch = prog[charpos];
+                while(ch != '"')
+                {
+                    if(ch == '!')
+                    {
+                        printf("\n");
+                    }
+                    else
+                    {
+                        printf("%c", ch);
+                    }
+                    charpos++;
+                    ch = prog[charpos];
+                }
                 break;
             default:
                 break;
@@ -165,42 +184,35 @@ int ctoi(char ch){
     }
 }
 
-//function for pushing value into the top of stack
-void push( stackPtr *top, int x )
+//push a number onto the stack_num
+int push(int val) 
 {
-    stackPtr nodePtr;
-
-    //allocating memory
-    nodePtr = malloc(sizeof(Stack));
-
-    //pushing value at the top of stack only if there is space
-    if(nodePtr != NULL)
-    {
-       nodePtr -> data = x;
-       nodePtr -> ptr = *top;
-       *top = nodePtr;
-    }
-
-    else
-       printf("\nERROR !!! (Not enough space)");
+   if(stackpointer >= STACKSIZE-1)
+   {
+        return 0;
+   } 
+   else 
+   {
+      stackpointer++;
+      stack_num[stackpointer]=val;
+      return 1;
    }
-
-//popping value out of the stack
-int pop(stackPtr *top)
-{
-   int pValue; //variable for value at the top
-   stackPtr tempPtr; //temporary pointer
-
-   tempPtr = *top;
-   pValue = (*top) -> data;
-   *top = (*top) -> ptr;
-   free(tempPtr); //free temporary pointer value
-   return pValue;
 }
 
-int checkEmpty(stackPtr top)
+//pop a number off of the stack_num
+int pop() 
 {
-   return top == NULL;
+    int n;
+    if(stackpointer <= -1)
+    {
+        printf("Stack Underflow.  Quitting.");
+        exit(-1);
+    }
+    else 
+    {
+       n = stack_num[stackpointer]; 
+       stackpointer--;
+       return n;
+    }
 }
-
 
