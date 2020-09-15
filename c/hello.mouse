@@ -5,7 +5,9 @@
 2 N:
 46 Z:
 A.N.*!"!"
+a:"Hello World!"
 Z.!"!"
+a.
 ?D:?E:
 D.E.+!"!"
 ~end of program

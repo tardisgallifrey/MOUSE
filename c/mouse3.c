@@ -34,8 +34,10 @@ int main(int argc, char *argv[])                        //get mouse program file
     char *prog = malloc(MAXPROGLEN * sizeof(char));     //program array of characters
     char data_strings[26][255];
     int *data_nums = malloc( 26 * sizeof(int));
+    char *buffer = malloc(MAXPROGLEN * sizeof(char));
     int charpos = 0;                                    //character position in array
     int temp;
+    int index;
 
     //Initialize string variable array to empty strings
     for(int i = 0; i < 26; i++)
@@ -143,6 +145,67 @@ int main(int argc, char *argv[])                        //get mouse program file
                     push(data_nums[temp]);
                 }
                 break;
+            case 'a':
+            case 'b':
+            case 'c':
+            case 'd':
+            case 'e':
+            case 'f':
+            case 'g':
+            case 'h':
+            case 'i':
+            case 'j':
+            case 'k':
+            case 'l':
+            case 'm':
+            case 'n':
+            case 'o':
+            case 'p':
+            case 'q':
+            case 'r':
+            case 's':
+            case 't':
+            case 'u':
+            case 'v':
+            case 'w':
+            case 'x':
+            case 'y':
+            case 'z':
+                temp = ch - 'a';
+                prog++;
+                ch = prog[charpos];
+                index = 0;
+                if( ch == ':')
+                {
+                    charpos += 2;
+                    ch = prog[charpos];
+                    while(ch != '"')
+                    {
+                        if(ch == '!')
+                        {
+                            buffer[index]='\n';
+                        }
+                        else
+                        {
+                            buffer[index]=ch;
+                        }
+                        index++;
+                        charpos++;
+                        ch = prog[charpos];
+                    }
+                    buffer[index+1]='\0';
+                    strcpy(data_strings[temp], buffer);
+                }
+                if(ch == '.')
+                {
+                    printf("%s", data_strings[temp]);
+                }
+
+                for(index=0;index < MAXPROGLEN;index++)
+                {
+                    buffer[index]='\0';
+                }
+                break;
             case '0':
             case '1':
             case '2':
@@ -192,18 +255,27 @@ int main(int argc, char *argv[])                        //get mouse program file
             case '"':
                 charpos++;
                 ch = prog[charpos];
+                index = 0;
                 while(ch != '"')
                 {
                     if(ch == '!')
                     {
-                        printf("\n");
+                        buffer[index]='\n';
                     }
                     else
                     {
-                        printf("%c", ch);
+                        buffer[index]=ch;
+
                     }
+                    index++;
                     charpos++;
                     ch = prog[charpos];
+                }
+                buffer[index+1]='\0';
+                printf("%s", buffer);
+                for(index=0;index < MAXPROGLEN;index++)
+                {
+                    buffer[index]='\0';
                 }
                 break;
             default:
